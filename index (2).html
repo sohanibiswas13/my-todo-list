@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>My To-Do List</title>
+<style>
+:root{--teal:#028090;--sea:#00a896;--mint:#02c39a;--navy:#0b2545;--ink:#1f2937;--muted:#5b6b73;--bg:#f4faf9;--card:#fff;--border:#e1ecea;--item:#f4faf9;--red:#d9534f}
+[data-theme=dark]{--navy:#e8f4f2;--ink:#e5ecef;--muted:#9fb0b8;--bg:#0b1720;--card:#13232e;--border:#223744;--item:#0f1d27}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Segoe UI",Calibri,Arial,sans-serif;transition:background .2s}
+nav{display:flex;justify-content:space-between;align-items:center;padding:14px 6%;background:var(--card);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:5}
+.brand{font-weight:700;font-size:20px;color:var(--navy)}
+button,select,input{font:inherit;color:var(--ink)}
+.icon-btn{border:1px solid var(--border);background:var(--card);border-radius:10px;padding:8px 12px;cursor:pointer}
+.hero{text-align:center;padding:70px 6%;background:linear-gradient(135deg,var(--teal),var(--mint));color:#fff}
+.hero h1{margin:0 0 12px;font-size:40px}.hero p{margin:0 auto 24px;max-width:520px;font-size:17px;opacity:.95}
+.btn{display:inline-block;background:#fff;color:var(--teal);font-weight:700;padding:12px 24px;border-radius:10px;text-decoration:none;border:none;cursor:pointer}
+section{padding:50px 6%}h2{margin:0 0 6px;color:var(--navy);text-align:center}.sub{text-align:center;color:var(--muted);margin:0 0 28px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px;max-width:980px;margin:0 auto}
+.fcard{background:var(--card);border:1px solid var(--border);border-left:4px solid var(--teal);border-radius:12px;padding:16px}
+.fcard b{display:block;color:var(--navy);margin-bottom:4px}.fcard span{color:var(--muted);font-size:13.5px}
+.app{max-width:560px;margin:0 auto;background:var(--card);border:1px solid var(--border);border-radius:16px;padding:26px;box-shadow:0 20px 40px -22px rgba(11,37,69,.35)}
+.row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+.app input,.app select{padding:10px 12px;border:1px solid var(--border);border-radius:10px;background:var(--card);outline:none}
+.app input:focus,.app select:focus{border-color:var(--sea);box-shadow:0 0 0 3px rgba(0,168,150,.18)}
+.grow{flex:1;min-width:120px}
+.add{background:var(--teal);color:#fff;border:none;border-radius:10px;padding:10px 20px;font-weight:600;cursor:pointer}.add:hover{background:var(--sea)}
+.chips button{border:1px solid var(--border);background:var(--card);border-radius:20px;padding:5px 12px;cursor:pointer;font-size:13px}
+.chips button.on{background:var(--teal);color:#fff;border-color:var(--teal)}
+.prog{margin:14px 0}.prog small{color:var(--muted)}.bar{height:8px;background:var(--border);border-radius:8px;margin-top:6px;overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--teal),var(--mint));transition:width .3s}
+ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;max-height:380px;overflow-y:auto}
+li{display:flex;align-items:center;gap:12px;padding:12px 14px;background:var(--item);border-radius:10px;border:1px solid transparent;cursor:grab}
+li.over{border-color:var(--sea)}li.dragging{opacity:.4}
+.chk{width:20px;height:20px;flex-shrink:0;border:2px solid var(--sea);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;cursor:pointer}
+.chk.on{background:var(--sea)}.body{flex:1;min-width:0}
+.txt{cursor:pointer;word-break:break-word;font-size:14.5px}li.done .txt{text-decoration:line-through;color:var(--muted)}
+.tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:5px}
+.tag{font-size:11px;padding:2px 8px;border-radius:10px;background:var(--border);color:var(--muted);font-weight:600}
+.tag.High{background:#fde4e3;color:#b03a37}.tag.Medium{background:#fff1d6;color:#9a6a00}.tag.Low{background:#dcf5ee;color:#0b7a5f}
+.tag.late{background:var(--red);color:#fff}
+.act{border:none;background:none;cursor:pointer;color:var(--muted);font-size:15px;padding:4px 6px;border-radius:6px}.act:hover{color:var(--red);background:rgba(217,83,79,.1)}
+.edit{width:100%;padding:6px 8px}
+.empty{text-align:center;color:var(--muted);padding:20px;display:none}
+.foot{display:flex;justify-content:flex-end;margin-top:10px}.link{background:none;border:none;color:var(--teal);cursor:pointer;font-weight:600}
+.about{max-width:700px;margin:0 auto;text-align:center;color:var(--muted);line-height:1.6}
+footer{text-align:center;padding:24px;color:var(--muted);font-size:13px;border-top:1px solid var(--border)}
+</style></head><body>
+<nav><span class="brand">✔ My To-Do List</span><button class="icon-btn" id="theme">🌙 Dark mode</button></nav>
+<header class="hero"><h1>Plan your day, one task at a time</h1><p>A simple task manager with priorities, due dates, search and more. Everything runs right in your browser.</p><a class="btn" href="#app">Start adding tasks</a></header>
+<section id="features"><h2>What it can do</h2><p class="sub">12 features, built step by step</p><div class="grid" id="fgrid"></div></section>
+<section id="app"><h2>Your Tasks</h2><p class="sub">Add, organise and finish your tasks.</p>
+<div class="app">
+ <form id="form"><div class="row"><input class="grow" id="text" placeholder="Add a new task..." autocomplete="off"></div>
+ <div class="row"><input type="date" id="due" class="grow"><select id="cat"><option>Personal</option><option>Work</option><option>Study</option><option>Other</option></select>
+ <select id="pri"><option>Low</option><option selected>Medium</option><option>High</option></select><button class="add">Add</button></div></form>
+ <div class="row"><input class="grow" id="q" placeholder="Search tasks..."><select id="sort"><option value="manual">Sort: Manual</option><option value="due">Sort: Due date</option><option value="pri">Sort: Priority</option><option value="name">Sort: Name</option></select></div>
+ <div class="row chips" id="chips"></div>
+ <div class="prog"><small id="ptxt">0 of 0 tasks complete</small><div class="bar"><i id="pbar"></i></div></div>
+ <ul id="list"></ul><p class="empty" id="empty">Nothing here yet. Add your first task above.</p>
+ <div class="foot"><button class="link" id="clear">Clear completed</button></div>
+</div></section>
+<section><h2>About</h2><p class="about">My To-Do List was built during a 30-day AI-assisted coding internship at PAS Digital Academy using only HTML, CSS and plain JavaScript. It started as a simple add, complete and delete list and grew one feature at a time. Tasks live in the browser, so they reset when you refresh the page.</p></section>
+<footer>Built by Sohani Biswas · HTML, CSS and JavaScript</footer>
+<script>
+const $=id=>document.getElementById(id),el=(t,c,x)=>{const e=document.createElement(t);if(c)e.className=c;if(x!==undefined)e.textContent=x;return e};
+[['Add tasks','Add with a due date, category and priority.'],['Edit in place','Tap the pencil and fix the text.'],['Done and undo','Click a task to finish it, again to undo.'],['Delete and clear','Remove one task or all completed.'],['Priority levels','Low, Medium, High colour tags.'],['Due dates','Overdue tasks turn red automatically.'],['Categories','Group tasks like Work or Personal.'],['Search','Find tasks as you type.'],['Sort','By due date, priority or name.'],['Filters','All, Active, Completed, Overdue.'],['Progress tracker','See how much is complete.'],['Drag and dark mode','Reorder by dragging. Switch themes.']]
+.forEach(f=>{const c=el('div','fcard');c.append(el('b',0,f[0]),el('span',0,f[1]));$('fgrid').append(c)});
+let tasks=[],nid=1,filter='all',editing=null,dragId=null;
+const today=()=>{const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')};
+const late=t=>!t.done&&t.due&&t.due<today(),PR={High:0,Medium:1,Low:2};
+['all','active','done','overdue'].forEach(f=>{const b=el('button',0,{all:'All',active:'Active',done:'Completed',overdue:'Overdue'}[f]);b.dataset.f=f;b.onclick=()=>{filter=f;render()};$('chips').append(b)});
+function visible(){const q=$('q').value.trim().toLowerCase(),s=$('sort').value;
+ let r=tasks.filter(t=>filter=='all'||(filter=='active'&&!t.done)||(filter=='done'&&t.done)||(filter=='overdue'&&late(t)));
+ if(q)r=r.filter(t=>(t.text+' '+t.cat).toLowerCase().includes(q));
+ if(s=='due')r=[...r].sort((a,b)=>(a.due||'9999').localeCompare(b.due||'9999'));
+ if(s=='pri')r=[...r].sort((a,b)=>PR[a.pri]-PR[b.pri]);
+ if(s=='name')r=[...r].sort((a,b)=>a.text.localeCompare(b.text));return r}
+function render(){const v=visible(),list=$('list');list.innerHTML='';
+ v.forEach(t=>{const li=el('li','task'+(t.done?' done':''));li.draggable=editing!==t.id;
+  const ck=el('span','chk'+(t.done?' on':''),t.done?'✓':'');ck.onclick=()=>{t.done=!t.done;render()};
+  const b=el('div','body');
+  if(editing===t.id){const i=el('input','edit');i.value=t.text;
+   const save=()=>{if(editing!==t.id)return;const x=i.value.trim();if(x)t.text=x;editing=null;render()};
+   i.onkeydown=e=>{if(e.key=='Enter')save();if(e.key=='Escape'){editing=null;render()}};i.onblur=save;b.append(i);setTimeout(()=>i.focus(),0)}
+  else{const x=el('div','txt',t.text);x.onclick=()=>{t.done=!t.done;render()};b.append(x)}
+  const tg=el('div','tags');tg.append(el('span','tag '+t.pri,t.pri),el('span','tag',t.cat));
+  if(t.due)tg.append(late(t)?el('span','tag late','Overdue · '+t.due):el('span','tag','Due '+t.due));b.append(tg);
+  const ed=el('button','act','✎');ed.title='Edit';ed.onclick=()=>{editing=t.id;render()};
+  const de=el('button','act','✕');de.title='Delete';de.onclick=()=>{tasks=tasks.filter(x=>x.id!==t.id);render()};
+  li.append(ck,b,ed,de);
+  li.ondragstart=()=>{dragId=t.id;li.classList.add('dragging')};li.ondragend=()=>li.classList.remove('dragging');
+  li.ondragover=e=>{e.preventDefault();li.classList.add('over')};li.ondragleave=()=>li.classList.remove('over');
+  li.ondrop=e=>{e.preventDefault();if(dragId===null||dragId===t.id)return;
+   const ids=v.map(x=>x.id).filter(i=>i!==dragId);ids.splice(ids.indexOf(t.id),0,dragId);
+   const rest=tasks.filter(x=>!ids.includes(x.id));tasks=[...ids.map(i=>tasks.find(x=>x.id===i)),...rest];
+   $('sort').value='manual';dragId=null;render()};
+  list.append(li)});
+ $('empty').style.display=v.length?'none':'block';
+ document.querySelectorAll('#chips button').forEach(b=>b.classList.toggle('on',b.dataset.f==filter));
+ const d=tasks.filter(t=>t.done).length,n=tasks.length;
+ $('ptxt').textContent=d+' of '+n+' task'+(n==1?'':'s')+' complete'+(n?' ('+Math.round(d/n*100)+'%)':'');
+ $('pbar').style.width=(n?d/n*100:0)+'%'}
+$('form').onsubmit=e=>{e.preventDefault();const x=$('text').value.trim();if(!x)return;
+ tasks.push({id:nid++,text:x,done:false,pri:$('pri').value,cat:$('cat').value,due:$('due').value});
+ $('text').value='';$('due').value='';$('text').focus();render()};
+$('q').oninput=render;$('sort').onchange=render;
+$('clear').onclick=()=>{tasks=tasks.filter(t=>!t.done);render()};
+$('theme').onclick=()=>{const d=document.documentElement.dataset.theme=='dark';document.documentElement.dataset.theme=d?'light':'dark';$('theme').textContent=d?'🌙 Dark mode':'☀ Light mode'};
+render();
+</script></body></html>
